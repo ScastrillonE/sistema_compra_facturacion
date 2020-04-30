@@ -1,0 +1,19 @@
+{% extends 'bases/base/base.html' %}
+{% block page_content %}
+ <div class="container-fluid">
+
+          <!-- Error Text -->
+          <div class="text-center">
+            <p class="text-xs" style="font-size:60px"> Usuario: <span class="error text-xs mx-auto" data-text="Usuario"
+                                               style="font-size:65px">
+                {{user.username}}
+            </span>
+            </p>
+            <!--<div class="error text-xs mx-auto" data-text="404">404</div>-->
+            <h5><mark> No cuenta con privilegios </mark> para cargar la opcion solicitada</h5>
+            <a href="{% url 'index' %}">&larr; Regresar al inicio</a> | <a href="{% url 'login' %}">
+              Ingresar con otro usuario</a>
+          </div>
+
+ </div>
+{%endblock%}

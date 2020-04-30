@@ -1,0 +1,99 @@
+{% extends 'bases/base/base.html' %}
+
+{% block page_content %}
+<div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Listado de Clientes</h6>
+<!--                  <div class="dropdown no-arrow">-->
+<!--                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>-->
+<!--                    </a>-->
+<!--                    <div class="dropdown-menu dropdown-menu-right shadow animated&#45;&#45;fade-in" aria-labelledby="dropdownMenuLink">-->
+<!--                      <div class="dropdown-header">Acciones:</div>-->
+<!--                      <a class="dropdown-item" onclick="return abrir_modal('{% url 'cliente_new' %}')" href="#" >Nuevo Cliente</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+                </div>
+                 <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <input type="text" class="form-class" name="f1" id="f1" readonly>
+                      </div>
+                      <div class="col-md-4">
+                        <input type="text" class="form-class" name="f2" id="f2" readonly>
+                      </div>
+                      <div class="col-md-4">
+                        <button class="btn btn-warning" type="button" id="btnPrint">Imprimir</button>
+                      </div>
+                    </div>
+                    <hr>
+                <div class="card-body">
+                    {%if not obj %}
+                       <p class="alert alert-info"> No hay facturas</p>
+                    {%endif%}
+                    <div class="buttons-toolbar">
+                        <a href="{% url 'factura_new' %}" class="btn btn-success" >Nueva</a>
+                    </div>
+                    <table id="table" data-toggle="table" data-pagination="true"
+                           data-search="true" data-show-columns="true"
+                           data-show-toggle="true" data-show-fullscreen="true" data-locale="es-ES"
+                           data-toolbar=".buttons-toolbar" >
+                        <thead>
+                            <th data-field="id" data-sortable="true">No.</th>
+                            <th>Cliente</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th class="all" >Acciones</th>
+                        </thead>
+                        <tbody>
+                            {% for item in obj %}
+                                <tr>
+                                    <td>{{item.id}}</td>
+                                    <td>{{item.cliente}}</td>
+                                    <td>{{item.total}}</td>
+                                    <td>{{item.estado|yesno:"Activo,Inactivo"}}
+
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'factura_edit' item.id %}" class="btn btn-warning "> <i class="far fa-edit"></i> </a>
+                                        <a href="#" class="btn btn-danger "> <i class="far fa-trash-alt"></i> </a>
+                                    </td>
+                                </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                </div>
+              </div>
+
+{% endblock %}
+{% block content_js %}
+    <script>
+        $(function(){
+            $('#f1,#f2').datetimepicker({
+                format: 'Y-m-d',
+                timepicker:false,
+            });
+            $("#btnPrint").click(function(e){
+                e.preventDefault();
+                var f1,f2;
+                f1 = $("#f1").val();
+                f2 = $("#f2").val();
+                if(f1=="" || f1==null){
+                  f1="2020-01-01";
+                }
+                if(f2=="" || f2==null){
+                  var d = new Date();
+                  var f2 = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+                }
+
+                var url = "imprimir-todas/" + f1 + "/" + f2;
+
+                window.open(url,'facturas');
+
+
+              });
+        });
+
+    </script>
+{%endblock%}

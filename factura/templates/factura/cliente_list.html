@@ -1,0 +1,66 @@
+{% extends 'bases/base/base.html' %}
+
+{% block page_content %}
+<div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Listado de Clientes</h6>
+                  <div class="dropdown no-arrow">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                      <div class="dropdown-header">Acciones:</div>
+                      <a class="dropdown-item" onclick="return abrir_modal('{% url 'cliente_new' %}')" href="#" >Nuevo Cliente</a>
+                    </div>
+                  </div>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    {%if not obj %}
+                       <p class="alert alert-info"> No hay Clientes</p>
+                    {%endif%}
+                    <table id="table" data-toggle="table" data-pagination="true"
+                           data-search="true" data-show-columns="true"
+                           data-show-toggle="true" data-show-fullscreen="true" data-locale="es-ES">
+                        <thead>
+                            <th data-field="id" data-sortable="true">Id</th>
+                            <th>Nombre</th>
+                            <th>Apellidos</th>
+                            <th>Tipo</th>
+                            <th>Celular</th>
+                            <th>Estado</th>
+                            <th class="all" >Acciones</th>
+                        </thead>
+                        <tbody>
+                            {% for item in obj %}
+                                <tr>
+                                    <td>{{item.id}}</td>
+                                    <td>{{item.nombre}}</td>
+                                    <td>{{item.apellidos}}</td>
+                                    <td>{{item.tipo}}</td>
+                                    <td>{{item.celular}}</td>
+                                    <td>{{item.estado|yesno:"Activo,Inactivo"}}
+
+                                    </td>
+                                    <td>
+                                        <button onclick="return abrir_modal('{% url 'cliente_edit' item.id %}')" href="{% url 'cliente_edit' item.id %}" class="btn btn-warning "> <i class="far fa-edit"></i> </button>
+                                        <a href="{% url 'cliente_delete' item.id %}" class="btn btn-danger "> <i class="far fa-trash-alt"></i> </a>
+                                    </td>
+                                </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
+                </div>
+              </div>
+
+{% endblock %}
+{% block content_js %}
+<script>
+  // Call the dataTables jQuery plugin
+  //$(document).ready(function() {
+    //$('.table').DataTable({
+
+  //});
+  </script>
+{%endblock%}
